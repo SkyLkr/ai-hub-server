@@ -1,7 +1,17 @@
 import express from 'express';
+import cors from 'cors';
+import { createConnection } from 'typeorm';
 
-const app = express();
+import routes from './routes';
 
-app.get('/', (request, response) => response.json({ message: 'Hello' }));
+(async () => {
+  const app = express();
 
-app.listen(3333);
+  app.use(cors());
+
+  await createConnection();
+
+  app.use(routes);
+
+  app.listen(process.env.PORT ?? 3333);
+})();

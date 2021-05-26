@@ -15,8 +15,14 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "import/prefer-default-export": "off",
         "import/extensions": "off",
-        "import/no-unresolved": "off"
+        "import/prefer-default-export": "off",
+        "import/order": "error",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "sort-imports": "off",
+        "import/no-unresolved": "off",
+        "no-shadow": "off",
+        "no-unused-vars": "off",
+        "no-console": "off"
     }
 }

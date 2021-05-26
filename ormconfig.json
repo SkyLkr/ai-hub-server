@@ -1,9 +1,10 @@
 {
+  "name": "default",
   "type": "sqlite",
-  "database": "database/database.sqlite",
+  "database": "src/database/database.sqlite",
   "synchronize": true,
   "logging": false,
   "entities": [
-    "src/entity/**/*{.js, .ts}"
+    "src/entity/**/*.ts"
   ]
 }
