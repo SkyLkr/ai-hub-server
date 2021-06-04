@@ -25,7 +25,7 @@ export class Model extends BaseEntity {
   frameworks: string;
 
   @Column()
-  fileUrl: string;
+  file: string;
 
   @ManyToOne(() => Repo, (repo) => repo.models)
   repo: Repo;
