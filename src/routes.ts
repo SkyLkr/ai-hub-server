@@ -22,6 +22,7 @@ routes.patch('/repos/:id', RepoController.patch);
 routes.delete('/repos/:id', RepoController.delete);
 
 routes.get('/repos/:repoId/models', ModelController.index);
+routes.get('/repos/:repoId/models/:id', ModelController.detail);
 routes.post('/repos/:repoId/models', upload.single('file'), ModelController.create);
 routes.patch('/repos/:repoId/models/:id', ModelController.update);
 routes.delete('/repos/:repoId/models/:id', ModelController.delete);

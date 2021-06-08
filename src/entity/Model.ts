@@ -12,6 +12,9 @@ export class Model extends BaseEntity {
   @Column()
   name: string;
 
+  @Column({ default: '' })
+  description: string;
+
   @Column()
   version: string;
 

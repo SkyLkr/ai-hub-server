@@ -17,10 +17,27 @@ export const ModelController = {
     }
   },
 
+  async detail(request: Request, response: Response) {
+    const { repoId, id } = request.params;
+
+    try {
+      const model = await Model.findOne({ where: { id, repo: { id: repoId } } });
+
+      if (!model) {
+        return response.status(404).json({ error: 'Modelo não encontrado' });
+      }
+
+      return response.json(ModelView.render(model));
+    } catch (error) {
+      console.error(error);
+      return response.status(400).send();
+    }
+  },
+
   async create(request: Request, response: Response) {
     const { repoId } = request.params;
     const {
-      name, version, type, metrics, frameworks,
+      name, description, version, type, metrics, frameworks,
     } = request.body;
 
     console.log(request.body);
@@ -33,7 +50,7 @@ export const ModelController = {
       }
 
       const model = Model.create({
-        name, version, type, metrics, frameworks, repo, file: request.file.filename,
+        name, description, version, type, metrics, frameworks, repo, file: request.file.filename,
       });
 
       await model.save();
@@ -48,7 +65,7 @@ export const ModelController = {
   async update(request: Request, response: Response) {
     const { repoId, id } = request.params;
     const {
-      name, version, type, metrics, frameworks,
+      name, description, version, type, metrics, frameworks,
     } = request.body;
 
     try {
@@ -59,6 +76,7 @@ export const ModelController = {
       }
 
       model.name = name ?? model.name;
+      model.description = description ?? model.description;
       model.version = version ?? model.version;
       model.type = type ?? model.type;
       model.metrics = metrics ?? model.metrics;
