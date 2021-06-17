@@ -1,5 +1,13 @@
 import {
-  BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn,
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { User } from './User';
@@ -29,5 +37,9 @@ export class Repo extends BaseEntity {
   owner: User;
 
   @OneToMany(() => Model, (model) => model.repo)
-  models: Model[]
+  models: Model[];
+
+  @ManyToMany(() => User, (user) => user.contributingRepos)
+  @JoinTable()
+  members: User[];
 }

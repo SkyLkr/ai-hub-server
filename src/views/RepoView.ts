@@ -1,9 +1,11 @@
 import { Repo } from '../entity/Repo';
 
+import { UserView } from './UserView';
+
 export class RepoView {
   static render(repo: Repo) {
     const {
-      id, name, description, visibility, owner,
+      id, name, description, visibility, owner, members,
     } = repo;
 
     return {
@@ -12,6 +14,7 @@ export class RepoView {
       description,
       visibility,
       owner,
+      members: members === undefined ? undefined : UserView.renderMany(members),
     };
   }
 

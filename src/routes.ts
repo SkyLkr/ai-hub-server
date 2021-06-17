@@ -13,6 +13,7 @@ const routes = Router();
 routes.use(json());
 
 routes.get('/users', UserController.index);
+routes.get('/users/:email', UserController.detail);
 routes.post('/users', UserController.create);
 
 routes.get('/repos', RepoController.index);
