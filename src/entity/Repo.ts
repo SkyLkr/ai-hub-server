@@ -13,7 +13,7 @@ import {
 import { User } from './User';
 import { Model } from './Model';
 
-enum RepoVisibility {
+export enum RepoVisibility {
   Public,
   Private,
 }

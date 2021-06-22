@@ -1,20 +1,27 @@
 import { Request, Response } from 'express';
-import { In } from 'typeorm';
+import { In, Like } from 'typeorm';
 
-import { Repo } from '../entity/Repo';
+import { Repo, RepoVisibility } from '../entity/Repo';
 import { User } from '../entity/User';
 import { RepoView } from '../views/RepoView';
 
 export const RepoController = {
   async index(request: Request, response: Response) {
-    const { userEmail } = request.query;
+    const { userEmail, searchTerm } = request.query;
 
     try {
-      const repos = await Repo.find({ relations: ['owner', 'members'] });
+      const repos = await Repo.find({
+        where: searchTerm ? [
+          { name: Like(`%${searchTerm}%`) },
+          { description: Like(`%${searchTerm}%`) },
+        ] : null,
+        relations: ['owner', 'members'],
+      });
 
       const filteredRepos = repos.filter(
         (repo) => (
           repo.owner.email === userEmail
+          || (searchTerm && repo.visibility === RepoVisibility.Public)
           || repo.members.some((member) => member.email === userEmail)
         ),
       );
@@ -31,7 +38,7 @@ export const RepoController = {
     const { id } = request.params;
 
     try {
-      const repo = await Repo.findOne(id, { relations: ['members'] });
+      const repo = await Repo.findOne(id, { relations: ['owner', 'members'] });
 
       if (!repo) {
         return response.status(404).json({ error: 'Repositório não encontrado' });
@@ -83,7 +90,14 @@ export const RepoController = {
         return response.status(404).json({ error: 'Usuário não encontrado' });
       }
 
-      const repo = await Repo.findOne(id);
+      const repo = await Repo.findOne(id, {
+        where: { owner },
+        relations: ['owner', 'members'],
+      });
+
+      if (!repo) {
+        return response.status(403).json({ error: 'Você não tem permissão para alterar este repositório' });
+      }
 
       repo.name = name ?? repo.name;
       repo.description = description ?? repo.description;
